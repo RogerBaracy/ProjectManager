@@ -2,18 +2,22 @@
   <div>
     <q-form>
       <input ref="file" type="file" label="import csv" />
-      <q-btn label="Carregar Dados" v-on:click="loadFile"></q-btn>
+      <q-btn label="Carregar Dados" v-on:click="loadFile" color="primary"></q-btn>
     </q-form>
-    <div v-if="rows.length > 0" class="q-pa-md">      
-      <vue-good-table
-        v-bind:columns="columns"
-        v-bind:rows="rows"
-        v-bind:fixed-header="true"
-        v-bind:line-numbers="true"
-        v-bind:search-options="{
-          enabled: true
-        }"
+    <div v-if="rows.length > 0" class="q-pa-md">
+      <q-table
+        title="Relatório Geral"
+        :data="rows"
+        :columns="columns"
+        row-key="name"
+        :pagination.sync="pagination"
+        hide-pagination
       />
+
+      <div class="row justify-center q-mt-md">
+        <q-pagination v-model="pagination.page" color="grey-8" :max="pagesNumber" size="sm" />
+      </div>
+     
     </div>
   </div>
 </template>
@@ -21,54 +25,54 @@
 <script lang="ts">
 import { Vue, Component, Model, Watch } from "vue-property-decorator";
 import Papa from "papaparse";
-import "vue-good-table/dist/vue-good-table.css";
-import { VueGoodTable } from "vue-good-table";
-@Component({
-  components: {
-    VueGoodTable,
-  },
-})
-export default class ImportCSV extends Vue {  
+@Component
+export default class ImportCSV extends Vue {
+  private pagination = {
+    sortBy: "desc",
+    descending: false,
+    page: 1,
+    rowsPerPage: 10,
+  };
   private columns = [
     { name: "ID", label: "ID", field: "id" },
     {
       name: "Work Item Type",
       label: "Tipo",
-      field: "work_type"      
+      field: "work_type",
     },
     {
       name: "Area Path",
       label: "Área",
-      field: "area"      
+      field: "area",
     },
     {
       name: "Title",
       label: "Título",
-      field: "title",     
+      field: "title",
     },
     {
       name: "Assigned To",
       label: "Guerreiro",
-      field: "assigned_to"
+      field: "assigned_to",
     },
     {
       name: "State",
       label: "Status",
-      field: "state"
+      field: "state",
     },
     {
       name: "Estimated Work",
       label: "Esforço estimado",
-      field: "estimated_work"
+      field: "estimated_work",
     },
     {
       name: "Executed Work",
       label: "Esforço executado",
-      field: "executed_work"
+      field: "executed_work",
     },
   ];
   private rows = [];
-  
+
   private loadFile() {
     var cols: Array<any> = [];
     var lines: Array<any> = [];
@@ -79,7 +83,7 @@ export default class ImportCSV extends Vue {
       complete: (results) => {
         results.data.map((data, index) => {
           if (index != 0)
-            lines.push({
+            lines.push({              
               // @ts-ignore
               id: data[0],
               // @ts-ignore
@@ -102,6 +106,9 @@ export default class ImportCSV extends Vue {
     });
     // @ts-ignore
     this.rows = lines;
+  }
+  get pagesNumber() {
+    return Math.ceil(this.rows.length / this.pagination.rowsPerPage);
   }
 }
 </script>
