@@ -9,6 +9,9 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@amcharts/amcharts4": "^4.9.34",
+    "@amcharts/amcharts4-fonts": "^4.0.1",
+    "@amcharts/amcharts4-geodata": "^4.1.17",
     "@quasar/extras": "^1.0.0",
     "@types/fs-extra": "^9.0.1",
     "@types/papaparse": "^5.0.4",
@@ -17,7 +20,6 @@
     "core-js": "^3.6.5",
     "papaparse": "^5.2.0",
     "quasar": "^1.0.0",
-    "vue-apexcharts": "^1.5.3",
     "vue-class-component": "^7.2.2",
     "vue-csv-import": "^3.3.2",
     "vue-i18n": "^8.0.0",
