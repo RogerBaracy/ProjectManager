@@ -64,4 +64,7 @@ export default class Dashboards extends Vue {
   width: 100%;
   height: 500px;
 }
+rect{
+  display: none;
+}
 </style>
